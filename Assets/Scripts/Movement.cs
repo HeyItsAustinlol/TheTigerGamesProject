@@ -5,9 +5,14 @@ public class Movement : MonoBehaviour
 {
     [SerializeField] float MoveSpeed = 10f;
     [SerializeField] float MoveSmoothing = 0.05f;
-    private Rigidbody rb;
+    private Rigidbody2D rb;
     private Vector3 vel = Vector3.zero;
     bool facingleft, horizontal;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
 
     void Update()
     {
@@ -23,6 +28,11 @@ public class Movement : MonoBehaviour
         Move(horzMove, vertMove);
     }
 
+    /// <summary>
+    /// Move the player based on X and Y axes
+    /// </summary>
+    /// <param name="moveX"></param>
+    /// <param name="moveY"></param>
     private void Move(float moveX, float moveY)
     {
         // Move the player smoothly
