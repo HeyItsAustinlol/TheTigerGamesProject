@@ -1,22 +1,45 @@
+using System.Collections;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public float fireRate = 0.5f;
-    public GameObject projectile;
-    public float fireCooldown = 2.0f;
-    public Movement player;
+    [SerializeField] GameObject projectile;
+    [SerializeField] float fireCooldown = 2.0f;
+    [SerializeField] Movement player;
+    Vector2 currentDir;
+    bool onCooldown = false;
 
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Update()
     {
-        
+        // Get direction
+        currentDir = player.transform.position - transform.position;
+        transform.rotation = Quaternion.FromToRotation(Vector3.up, currentDir);
+
+        // Attempt an attack
+        Attack();
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// Attempts to shoot a projectile unless it's on a cooldown
+    /// </summary>
+    private void Attack()
     {
-        transform.LookAt(player.transform);
+        StartCoroutine(Shoot());
+    }
+
+    IEnumerator Shoot()
+    {
+        // Check to make sure multiple timers won't run at the same time
+        if (!onCooldown)
+        {
+            // Shoot projectile in the direction the enemy is facing
+            Projectile proj = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Projectile>();
+            proj.Init(currentDir);
+
+            // Begin cooldown
+            onCooldown = true;
+            yield return new WaitForSeconds(fireCooldown);
+            onCooldown = false;
+        }
     }
 }
