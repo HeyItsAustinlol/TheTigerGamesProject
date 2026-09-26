@@ -6,24 +6,26 @@ using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
-    public int score = 0;
-    public int enemiesKilled = 0;
-    public TextMeshProUGUI scoreText;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] int score = 0;
+    [SerializeField] int enemiesKilled = 0;
+    [SerializeField] TextMeshProUGUI scoreText;
+    [SerializeField] Animator animator;
+    
+    void Update()
     {
+        scoreText.text = $"Score: {score}";
+
+        if (Input.GetKeyDown(KeyCode.KeypadEnter)) score += 10;
+
+        if (Input.GetKeyDown(KeyCode.Space)) Attack();
         
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Attack()
     {
-        scoreText.text = "Score: " + score.ToString();
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            score += 10;
-        }
+        animator.Play("SwipeAttack");
     }
+
     public int updateScore(int newScore)
     {
         score = newScore;
