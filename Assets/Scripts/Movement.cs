@@ -7,7 +7,7 @@ public class Movement : MonoBehaviour
     [SerializeField] float MoveSmoothing = 0.05f;
     private Rigidbody2D rb;
     private Vector3 vel = Vector3.zero;
-    bool facingleft, horizontal;
+    public bool facingleft, horizontal, up;
 
     void Start()
     {
@@ -38,6 +38,29 @@ public class Movement : MonoBehaviour
         // Move the player smoothly
         Vector3 targetvel = new Vector3(moveX, moveY).normalized * MoveSpeed;
         rb.linearVelocity = Vector3.SmoothDamp(rb.linearVelocity, targetvel, ref vel, MoveSmoothing);
+
+        // Animate
+        if (!GetComponent<Player>().Swiping)
+        {
+            if (Mathf.Abs(moveY) > Mathf.Abs(moveX) && moveY > 0)
+            {
+                GetComponent<Animator>().Play("WalkUp");
+                horizontal = false;
+                up = true;
+            }
+            if (Mathf.Abs(moveY) > Mathf.Abs(moveX) && moveY < 0)
+            {
+                GetComponent<Animator>().Play("WalkDown");
+                horizontal = false;
+                up = false;
+            }
+            if (Mathf.Abs(moveX) > Mathf.Abs(moveY))
+            {
+                GetComponent<Animator>().Play("WalkHorz");
+                horizontal = true;
+                up = false;
+            }
+        }
 
         // If horizontal facing, flip the sprite if the bool does not match
         if (horizontal)

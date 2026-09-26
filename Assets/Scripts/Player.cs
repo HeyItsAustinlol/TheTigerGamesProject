@@ -1,8 +1,6 @@
-using System.Linq.Expressions;
+using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
@@ -10,7 +8,9 @@ public class Player : MonoBehaviour
     [SerializeField] int enemiesKilled = 0;
     [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] Animator animator;
-    
+    [SerializeField] GameObject swipe;
+    public bool Swiping;
+
     void Update()
     {
         scoreText.text = $"Score: {score}";
@@ -23,7 +23,28 @@ public class Player : MonoBehaviour
 
     private void Attack()
     {
-        animator.Play("SwipeAttack");
+        Movement move = GetComponent<Movement>();
+
+        if (move.horizontal) animator.Play("SwipeHorz");
+        if (move.up) animator.Play("SwipeUp");
+        if (!move.horizontal && !move.up) animator.Play("SwipeDown");
+
+        StartCoroutine(SwipeAnim());
+    }
+
+    IEnumerator SwipeAnim()
+    {
+        if (!Swiping)
+        {
+            Swiping = true;
+            yield return new WaitForSeconds(0.2f);
+            Swiping = false;
+        }
+    }
+
+    public void DoSwipeEffect()
+    {
+        swipe.GetComponent<Swipe>().SwipeObjects();
     }
 
     public int updateScore(int newScore)

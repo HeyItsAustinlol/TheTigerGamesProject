@@ -14,9 +14,10 @@ public class Swipe : MonoBehaviour
 
         foreach (Collider2D col in cols)
         {
-            if (col.GetComponent<Projectile>())
+            if (col.transform.GetComponent<Projectile>() != null)
             {
                 col.GetComponent<Projectile>().KillProjectile();
+                FindFirstObjectByType<Player>().updateEnemiesKilled();
             }
         }
     }
