@@ -35,6 +35,11 @@ public class Projectile : MonoBehaviour
         if (curval == 1) KillProjectile();
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.GetComponent<Player>()) GetComponent<Player>().Die();
+    }
+
     /// <summary>
     /// Destroys the projectile
     /// </summary>

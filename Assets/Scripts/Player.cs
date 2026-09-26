@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] Animator animator;
     [SerializeField] GameObject swipe;
+    [SerializeField] GameObject Death;
     public bool Swiping;
 
     void Update()
@@ -19,6 +20,11 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space)) Attack();
         
+    }
+
+    public void Die()
+    {
+        Death.SetActive(true);
     }
 
     private void Attack()
